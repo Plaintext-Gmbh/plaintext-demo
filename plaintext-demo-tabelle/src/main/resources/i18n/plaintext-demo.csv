@@ -35,3 +35,74 @@ Verfuegbar;en;Available
 Knapp;en;Low stock
 Bestellt;en;Ordered
 Ausgelaufen;en;Discontinued
+# fr / it (Daniel 12.11.: vier Sprachen)
+Demo;fr;Démo
+Demo;it;Demo
+Konfigurierbare Tabelle;fr;Tableau configurable
+Konfigurierbare Tabelle;it;Tabella configurabile
+Mandat;fr;Mandant
+Mandat;it;Mandante
+Diese Tabelle zeigt den Baustein pt:tableSettings von plaintext-root.;fr;Ce tableau montre le composant pt:tableSettings de plaintext-root.
+Diese Tabelle zeigt den Baustein pt:tableSettings von plaintext-root.;it;Questa tabella mostra il componente pt:tableSettings di plaintext-root.
+Alles, was Sie einstellen, wird je Benutzer und Mandat gespeichert und gilt auch nach dem Neuladen.;fr;Tout ce que vous réglez est enregistré par utilisateur et par mandant et reste après le rechargement.
+Alles, was Sie einstellen, wird je Benutzer und Mandat gespeichert und gilt auch nach dem Neuladen.;it;Tutto ciò che imposti viene salvato per utente e mandante e rimane dopo il ricaricamento.
+Der Knopf oberhalb der Tabelle oeffnet die Einstellungen: Spalten ein- und ausblenden, Reihenfolge, Breiten, Profile, Paginierung.;fr;Le bouton au-dessus du tableau ouvre les réglages : afficher et masquer des colonnes, ordre, largeurs, profils, pagination.
+Der Knopf oberhalb der Tabelle oeffnet die Einstellungen: Spalten ein- und ausblenden, Reihenfolge, Breiten, Profile, Paginierung.;it;Il pulsante sopra la tabella apre le impostazioni: mostrare e nascondere colonne, ordine, larghezze, profili, paginazione.
+Artikelnummer und Produktname sind Pflichtspalten und lassen sich nicht ausblenden. Sieben Spalten sind anfangs ausgeblendet.;fr;Le numéro d'article et le nom du produit sont obligatoires et ne peuvent pas être masqués. Sept colonnes sont masquées au départ.
+Artikelnummer und Produktname sind Pflichtspalten und lassen sich nicht ausblenden. Sieben Spalten sind anfangs ausgeblendet.;it;Il numero articolo e il nome del prodotto sono obbligatori e non si possono nascondere. Sette colonne sono nascoste all'inizio.
+Mit Verschieben und Groesse aendern lassen sich Spalten direkt im Kopf ziehen. Die Breiten-Knoepfe verteilen die Breite neu.;fr;Avec déplacer et redimensionner, vous tirez les colonnes directement dans l'en-tête. Les boutons de largeur répartissent la largeur.
+Mit Verschieben und Groesse aendern lassen sich Spalten direkt im Kopf ziehen. Die Breiten-Knoepfe verteilen die Breite neu.;it;Con sposta e ridimensiona trascini le colonne direttamente nell'intestazione. I pulsanti di larghezza ridistribuiscono la larghezza.
+Sortierung und Filter wirken auf alle Spalten. Das zweite Mandat extra hat eigene Daten.;fr;Le tri et les filtres agissent sur toutes les colonnes. Le deuxième mandant extra a ses propres données.
+Sortierung und Filter wirken auf alle Spalten. Das zweite Mandat extra hat eigene Daten.;it;Ordinamento e filtri agiscono su tutte le colonne. Il secondo mandante extra ha i propri dati.
+Keine Eintraege vorhanden;fr;Aucune entrée
+Keine Eintraege vorhanden;it;Nessuna voce
+Artikelnummer;fr;N° d'article
+Artikelnummer;it;N. articolo
+Produktname;fr;Nom du produit
+Produktname;it;Nome prodotto
+Kategorie;fr;Catégorie
+Kategorie;it;Categoria
+Lieferant;fr;Fournisseur
+Lieferant;it;Fornitore
+Lager;fr;Entrepôt
+Lager;it;Magazzino
+Menge;fr;Quantité
+Menge;it;Quantità
+Einheit;fr;Unité
+Einheit;it;Unità
+Preis;fr;Prix
+Preis;it;Prezzo
+Waehrung;fr;Devise
+Waehrung;it;Valuta
+MWST %;fr;TVA %
+MWST %;it;IVA %
+Gewicht kg;fr;Poids kg
+Gewicht kg;it;Peso kg
+Farbe;fr;Couleur
+Farbe;it;Colore
+Status;fr;Statut
+Status;it;Stato
+Aktiv;fr;Actif
+Aktiv;it;Attivo
+Lanciert;fr;Lancé
+Lanciert;it;Lanciato
+Letzte Lieferung;fr;Dernière livraison
+Letzte Lieferung;it;Ultima consegna
+Verantwortlich;fr;Responsable
+Verantwortlich;it;Responsabile
+Bewertung;fr;Évaluation
+Bewertung;it;Valutazione
+Herkunft;fr;Origine
+Herkunft;it;Origine
+EAN;fr;EAN
+EAN;it;EAN
+Bemerkung;fr;Remarque
+Bemerkung;it;Osservazione
+Verfuegbar;fr;Disponible
+Verfuegbar;it;Disponibile
+Knapp;fr;Stock faible
+Knapp;it;Scorte basse
+Bestellt;fr;Commandé
+Bestellt;it;Ordinato
+Ausgelaufen;fr;Abandonné
+Ausgelaufen;it;Fuori produzione
