@@ -14,6 +14,27 @@
         <dependency>
             <groupId>ch.plaintext.v2</groupId>
             <artifactId>plaintext-root-webapp</artifactId>
+            <!-- Public demo, everyone is root (Karte 2042, Entscheid Daniel B): no outgoing calls, no secret store.
+                 These four are opt-out modules per root's docs/OPTIONAL_MODULES.md; apitoken and sessions are
+                 not, the demo guard switches their pages off instead. -->
+            <exclusions>
+                <exclusion>
+                    <groupId>ch.plaintext.v2</groupId>
+                    <artifactId>plaintext-admin-webhooks</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>ch.plaintext.v2</groupId>
+                    <artifactId>plaintext-admin-secrets</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>ch.plaintext.v2</groupId>
+                    <artifactId>plaintext-admin-sidecars</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>ch.plaintext.v2</groupId>
+                    <artifactId>plaintext-admin-claude</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>ch.plaintext.demo</groupId>
