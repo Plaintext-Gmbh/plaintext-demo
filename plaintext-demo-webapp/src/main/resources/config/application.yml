@@ -25,3 +25,10 @@ logging:
   level:
     ch.DemoBootApplication: INFO
     ch.plaintext.demo: INFO
+
+plaintext:
+  login:
+    # Daniel 12.11. (Karte 2042 B, root >= 3.22.0): no own form - the login page goes straight to the
+    # single identity provider, the built-in demo IdP, whose page shows the demo accounts.
+    form: false
+    auto-redirect-single-idp: true
