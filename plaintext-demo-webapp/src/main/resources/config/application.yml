@@ -1,0 +1,27 @@
+# plaintext-demo: overrides on top of plaintext-root's application.yml (which stays in effect).
+spring:
+  application:
+    name: plaintext-demo
+  datasource:
+    # H2 file database next to the jar (DEMO_DATA_DIR overrides the directory).
+    url: jdbc:h2:file:${DEMO_DATA_DIR:./data}/plaintext-demo;MODE=PostgreSQL;DATABASE_TO_LOWER=TRUE;DEFAULT_NULL_ORDERING=HIGH;NON_KEYWORDS=KEY,VALUE,INDEX,TYPE,USER,YEAR,MONTH,DAY,VALUES,ROW,NUMBER
+    username: sa
+    password: ""
+    driver-class-name: org.h2.Driver
+  jpa:
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.H2Dialect
+
+server:
+  port: ${DEMO_PORT:8080}
+
+demo:
+  oauth-mock:
+    # Public URL of this instance; the OIDC issuer and the redirect URI are derived from it.
+    base-url: ${DEMO_BASE_URL:http://localhost:${server.port}}
+
+logging:
+  level:
+    ch.DemoBootApplication: INFO
+    ch.plaintext.demo: INFO

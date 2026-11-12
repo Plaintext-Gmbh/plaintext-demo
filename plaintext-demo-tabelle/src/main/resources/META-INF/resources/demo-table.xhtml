@@ -1,0 +1,146 @@
+<ui:composition xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:pt="http://plaintext.ch/ui"
+                xmlns="http://www.w3.org/1999/xhtml" template="/includes/template.xhtml">
+
+    <f:metadata>
+        <f:event type="preRenderView" listener="#{demoTableBackingBean.load()}"/>
+    </f:metadata>
+
+    <ui:define name="title">#{i18n.t('Konfigurierbare Tabelle')}</ui:define>
+
+    <ui:define name="content">
+        <h:form id="fm">
+            <input type="hidden" name="_csrf" value="#{_csrf.token}"/>
+            <style>
+                .demo-intro { background: var(--surface-ground, #f8f9fa); border-radius: 8px; padding: 14px 18px; margin-bottom: 14px; line-height: 1.5; }
+                .demo-intro ul { margin: 6px 0 0 0; padding-left: 20px; }
+                .demo-status { padding: 2px 8px; border-radius: 10px; font-size: 12px; background: #e5e7eb; }
+                .demo-status-AVAILABLE { background: #dcfce7; } .demo-status-LOW_STOCK { background: #fef9c3; }
+                .demo-status-DISCONTINUED { background: #fee2e2; } .demo-status-ORDERED { background: #dbeafe; }
+            </style>
+
+            <p:fieldset legend="#{i18n.t('Konfigurierbare Tabelle')} &#8211; #{i18n.t('Mandat')}: #{demoTableBackingBean.mandat}" style="margin-bottom: 20px;">
+                <div class="demo-intro">
+                    <strong>#{i18n.t('Diese Tabelle zeigt den Baustein pt:tableSettings von plaintext-root.')}</strong>
+                    #{i18n.t('Alles, was Sie einstellen, wird je Benutzer und Mandat gespeichert und gilt auch nach dem Neuladen.')}
+                    <ul>
+                        <li>#{i18n.t('Der Knopf oberhalb der Tabelle oeffnet die Einstellungen: Spalten ein- und ausblenden, Reihenfolge, Breiten, Profile, Paginierung.')}</li>
+                        <li>#{i18n.t('Artikelnummer und Produktname sind Pflichtspalten und lassen sich nicht ausblenden. Sechs Spalten sind anfangs ausgeblendet.')}</li>
+                        <li>#{i18n.t('Mit Verschieben und Groesse aendern lassen sich Spalten direkt im Kopf ziehen. Die Breiten-Knoepfe verteilen die Breite neu.')}</li>
+                        <li>#{i18n.t('Sortierung und Filter wirken auf alle Spalten. Das zweite Mandat extra hat eigene Daten.')}</li>
+                    </ul>
+                </div>
+
+                <pt:tableSettings anzeige="#{demoTableBackingBean.anzeige}" tabelle=":fm:tbl"/>
+
+                <p:dataTable id="tbl" var="m" value="#{demoTableBackingBean.products}" widgetVar="tblDemo"
+                             filteredValue="#{demoTableBackingBean.filteredProducts}"
+                             selectionMode="single" selection="#{demoTableBackingBean.selected}" rowKey="#{m.id}"
+                             emptyMessage="#{i18n.t('Keine Eintraege vorhanden')}"
+                             rowIndexVar="zeilenIndex"
+                             paginator="#{demoTableBackingBean.anzeige.paginator}"
+                             paginatorPosition="#{demoTableBackingBean.anzeige.paginatorPosition}"
+                             rows="#{demoTableBackingBean.anzeige.rows}"
+                             rowsPerPageTemplate="#{demoTableBackingBean.anzeige.rowsPerPageTemplate}"
+                             sortBy="#{demoTableBackingBean.anzeige.sortMeta}"
+                             styleClass="mobile-safe"
+                             draggableColumns="#{demoTableBackingBean.anzeige.verschiebenAktiv}"
+                             resizableColumns="#{demoTableBackingBean.anzeige.groesseAendernAktiv}"
+                             resizeMode="expand"
+                             tableStyle="#{demoTableBackingBean.anzeige.tabellenBreite}">
+                    <p:ajax event="colResize" listener="#{demoTableBackingBean.anzeige.onColumnResize}"/>
+                    <p:ajax event="colReorder" listener="#{demoTableBackingBean.anzeige.onColReorder(event, ':fm:tbl')}" update="fm:anz-bereich :fm:tbl"/>
+                    <p:ajax event="page" listener="#{demoTableBackingBean.anzeige.onPage}"/>
+                    <p:ajax event="sort" listener="#{demoTableBackingBean.anzeige.onSort}"/>
+                    <p:column headerText="#{demoTableBackingBean.anzeige.columnLabel('sku')}" sortBy="#{m.sku}" filterBy="#{m.sku}" filterMatchMode="contains"
+                              style="#{demoTableBackingBean.anzeige.widthStyle('sku')}" rendered="#{demoTableBackingBean.anzeige.isVisible('sku')}">
+                        <h:outputText value="#{m.sku}"/>
+                    </p:column>
+                    <p:column headerText="#{demoTableBackingBean.anzeige.columnLabel('name')}" sortBy="#{m.name}" filterBy="#{m.name}" filterMatchMode="contains"
+                              style="#{demoTableBackingBean.anzeige.widthStyle('name')}" rendered="#{demoTableBackingBean.anzeige.isVisible('name')}">
+                        <h:outputText value="#{m.name}"/>
+                    </p:column>
+                    <p:column headerText="#{demoTableBackingBean.anzeige.columnLabel('category')}" sortBy="#{m.category}" filterBy="#{m.category}" filterMatchMode="contains"
+                              style="#{demoTableBackingBean.anzeige.widthStyle('category')}" rendered="#{demoTableBackingBean.anzeige.isVisible('category')}">
+                        <h:outputText value="#{m.category}"/>
+                    </p:column>
+                    <p:column headerText="#{demoTableBackingBean.anzeige.columnLabel('supplier')}" sortBy="#{m.supplier}" filterBy="#{m.supplier}" filterMatchMode="contains"
+                              style="#{demoTableBackingBean.anzeige.widthStyle('supplier')}" rendered="#{demoTableBackingBean.anzeige.isVisible('supplier')}">
+                        <h:outputText value="#{m.supplier}"/>
+                    </p:column>
+                    <p:column headerText="#{demoTableBackingBean.anzeige.columnLabel('warehouse')}" sortBy="#{m.warehouse}" filterBy="#{m.warehouse}" filterMatchMode="contains"
+                              style="#{demoTableBackingBean.anzeige.widthStyle('warehouse')}" rendered="#{demoTableBackingBean.anzeige.isVisible('warehouse')}">
+                        <h:outputText value="#{m.warehouse}"/>
+                    </p:column>
+                    <p:column headerText="#{demoTableBackingBean.anzeige.columnLabel('quantity')}" sortBy="#{m.quantity}" filterBy="#{m.quantity}" filterMatchMode="contains"
+                              style="#{demoTableBackingBean.anzeige.widthStyle('quantity')} text-align:right;" rendered="#{demoTableBackingBean.anzeige.isVisible('quantity')}">
+                        <h:outputText value="#{m.quantity}"/>
+                    </p:column>
+                    <p:column headerText="#{demoTableBackingBean.anzeige.columnLabel('unit')}" sortBy="#{m.unit}" filterBy="#{m.unit}" filterMatchMode="contains"
+                              style="#{demoTableBackingBean.anzeige.widthStyle('unit')}" rendered="#{demoTableBackingBean.anzeige.isVisible('unit')}">
+                        <h:outputText value="#{m.unit}"/>
+                    </p:column>
+                    <p:column headerText="#{demoTableBackingBean.anzeige.columnLabel('price')}" sortBy="#{m.price}" filterBy="#{m.price}" filterMatchMode="contains"
+                              style="#{demoTableBackingBean.anzeige.widthStyle('price')} text-align:right;" rendered="#{demoTableBackingBean.anzeige.isVisible('price')}">
+                        <h:outputText value="#{m.price}"><f:convertNumber minFractionDigits="2" maxFractionDigits="2"/></h:outputText>
+                    </p:column>
+                    <p:column headerText="#{demoTableBackingBean.anzeige.columnLabel('currency')}" sortBy="#{m.currency}" filterBy="#{m.currency}" filterMatchMode="contains"
+                              style="#{demoTableBackingBean.anzeige.widthStyle('currency')}" rendered="#{demoTableBackingBean.anzeige.isVisible('currency')}">
+                        <h:outputText value="#{m.currency}"/>
+                    </p:column>
+                    <p:column headerText="#{demoTableBackingBean.anzeige.columnLabel('vatRate')}" sortBy="#{m.vatRate}" filterBy="#{m.vatRate}" filterMatchMode="contains"
+                              style="#{demoTableBackingBean.anzeige.widthStyle('vatRate')} text-align:right;" rendered="#{demoTableBackingBean.anzeige.isVisible('vatRate')}">
+                        <h:outputText value="#{m.vatRate}"/>
+                    </p:column>
+                    <p:column headerText="#{demoTableBackingBean.anzeige.columnLabel('weightKg')}" sortBy="#{m.weightKg}" filterBy="#{m.weightKg}" filterMatchMode="contains"
+                              style="#{demoTableBackingBean.anzeige.widthStyle('weightKg')} text-align:right;" rendered="#{demoTableBackingBean.anzeige.isVisible('weightKg')}">
+                        <h:outputText value="#{m.weightKg}"/>
+                    </p:column>
+                    <p:column headerText="#{demoTableBackingBean.anzeige.columnLabel('color')}" sortBy="#{m.color}" filterBy="#{m.color}" filterMatchMode="contains"
+                              style="#{demoTableBackingBean.anzeige.widthStyle('color')}" rendered="#{demoTableBackingBean.anzeige.isVisible('color')}">
+                        <h:outputText value="#{m.color}"/>
+                    </p:column>
+                    <p:column headerText="#{demoTableBackingBean.anzeige.columnLabel('status')}" sortBy="#{m.status}" filterBy="#{m.status}" filterMatchMode="contains"
+                              style="#{demoTableBackingBean.anzeige.widthStyle('status')}" rendered="#{demoTableBackingBean.anzeige.isVisible('status')}">
+                        <span class="demo-status demo-status-#{m.status}">#{demoTableBackingBean.statusText(m.status)}</span>
+                    </p:column>
+                    <p:column headerText="#{demoTableBackingBean.anzeige.columnLabel('active')}" sortBy="#{m.active}" filterBy="#{m.active}" filterMatchMode="contains"
+                              style="#{demoTableBackingBean.anzeige.widthStyle('active')}" rendered="#{demoTableBackingBean.anzeige.isVisible('active')}">
+                        <i class="pi #{m.active ? 'pi-check' : 'pi-minus'}" title="#{m.active}"/>
+                    </p:column>
+                    <p:column headerText="#{demoTableBackingBean.anzeige.columnLabel('releaseDate')}" sortBy="#{m.releaseDate}" filterBy="#{m.releaseDate}" filterMatchMode="contains"
+                              style="#{demoTableBackingBean.anzeige.widthStyle('releaseDate')}" rendered="#{demoTableBackingBean.anzeige.isVisible('releaseDate')}">
+                        <h:outputText value="#{m.releaseDate}"><f:convertDateTime type="localDate" pattern="yyyy-MM-dd"/></h:outputText>
+                    </p:column>
+                    <p:column headerText="#{demoTableBackingBean.anzeige.columnLabel('lastDelivery')}" sortBy="#{m.lastDelivery}" filterBy="#{m.lastDelivery}" filterMatchMode="contains"
+                              style="#{demoTableBackingBean.anzeige.widthStyle('lastDelivery')}" rendered="#{demoTableBackingBean.anzeige.isVisible('lastDelivery')}">
+                        <h:outputText value="#{m.lastDelivery}"><f:convertDateTime type="localDate" pattern="yyyy-MM-dd"/></h:outputText>
+                    </p:column>
+                    <p:column headerText="#{demoTableBackingBean.anzeige.columnLabel('owner')}" sortBy="#{m.owner}" filterBy="#{m.owner}" filterMatchMode="contains"
+                              style="#{demoTableBackingBean.anzeige.widthStyle('owner')}" rendered="#{demoTableBackingBean.anzeige.isVisible('owner')}">
+                        <h:outputText value="#{m.owner}"/>
+                    </p:column>
+                    <p:column headerText="#{demoTableBackingBean.anzeige.columnLabel('rating')}" sortBy="#{m.rating}" filterBy="#{m.rating}" filterMatchMode="contains"
+                              style="#{demoTableBackingBean.anzeige.widthStyle('rating')} text-align:right;" rendered="#{demoTableBackingBean.anzeige.isVisible('rating')}">
+                        <h:outputText value="#{'★★★★★'.substring(0, m.rating)}" title="#{m.rating} / 5"/>
+                    </p:column>
+                    <p:column headerText="#{demoTableBackingBean.anzeige.columnLabel('country')}" sortBy="#{m.country}" filterBy="#{m.country}" filterMatchMode="contains"
+                              style="#{demoTableBackingBean.anzeige.widthStyle('country')}" rendered="#{demoTableBackingBean.anzeige.isVisible('country')}">
+                        <h:outputText value="#{m.country}"/>
+                    </p:column>
+                    <p:column headerText="#{demoTableBackingBean.anzeige.columnLabel('ean')}" sortBy="#{m.ean}" filterBy="#{m.ean}" filterMatchMode="contains"
+                              style="#{demoTableBackingBean.anzeige.widthStyle('ean')}" rendered="#{demoTableBackingBean.anzeige.isVisible('ean')}">
+                        <h:outputText value="#{m.ean}"/>
+                    </p:column>
+                    <p:column headerText="#{demoTableBackingBean.anzeige.columnLabel('notes')}" sortBy="#{m.notes}" filterBy="#{m.notes}" filterMatchMode="contains"
+                              style="#{demoTableBackingBean.anzeige.widthStyle('notes')}" rendered="#{demoTableBackingBean.anzeige.isVisible('notes')}">
+                        <h:outputText value="#{m.notes}"/>
+                    </p:column>
+                </p:dataTable>
+            </p:fieldset>
+        </h:form>
+    </ui:define>
+</ui:composition>

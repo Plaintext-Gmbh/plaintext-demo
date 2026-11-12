@@ -1,0 +1,37 @@
+defaultLabel;languageCode;translatedText
+# plaintext-demo: English for the demo's own texts (key = German default text, as in i18n.t('...')).
+Demo;en;Demo
+Konfigurierbare Tabelle;en;Configurable table
+Mandat;en;Tenant
+Diese Tabelle zeigt den Baustein pt:tableSettings von plaintext-root.;en;This table shows plaintext-root's building block pt:tableSettings.
+Alles, was Sie einstellen, wird je Benutzer und Mandat gespeichert und gilt auch nach dem Neuladen.;en;Everything you set is stored per user and mandate and survives a reload.
+Der Knopf oberhalb der Tabelle oeffnet die Einstellungen: Spalten ein- und ausblenden, Reihenfolge, Breiten, Profile, Paginierung.;en;The button above the table opens the settings: show and hide columns, order, widths, profiles, paging.
+Artikelnummer und Produktname sind Pflichtspalten und lassen sich nicht ausblenden. Sechs Spalten sind anfangs ausgeblendet.;en;SKU and product name are required columns and cannot be hidden. Six columns start hidden.
+Mit Verschieben und Groesse aendern lassen sich Spalten direkt im Kopf ziehen. Die Breiten-Knoepfe verteilen die Breite neu.;en;With move and resize you drag columns right in the header. The width buttons redistribute the width.
+Sortierung und Filter wirken auf alle Spalten. Das zweite Mandat extra hat eigene Daten.;en;Sorting and filters work on every column. The second tenant extra has its own data.
+Keine Eintraege vorhanden;en;No entries
+Artikelnummer;en;SKU
+Produktname;en;Product name
+Kategorie;en;Category
+Lieferant;en;Supplier
+Lager;en;Warehouse
+Menge;en;Quantity
+Einheit;en;Unit
+Preis;en;Price
+Waehrung;en;Currency
+MWST %;en;VAT %
+Gewicht kg;en;Weight kg
+Farbe;en;Color
+Status;en;Status
+Aktiv;en;Active
+Lanciert;en;Released
+Letzte Lieferung;en;Last delivery
+Verantwortlich;en;Owner
+Bewertung;en;Rating
+Herkunft;en;Country
+EAN;en;EAN
+Bemerkung;en;Notes
+Verfuegbar;en;Available
+Knapp;en;Low stock
+Bestellt;en;Ordered
+Ausgelaufen;en;Discontinued

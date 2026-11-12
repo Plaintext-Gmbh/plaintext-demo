@@ -1,0 +1,10 @@
+target/
+data/
+*.log
+*.mv.db
+*.trace.db
+.idea/
+*.iml
+.vscode/
+.playwright-mcp/
+plaintext-demo/
