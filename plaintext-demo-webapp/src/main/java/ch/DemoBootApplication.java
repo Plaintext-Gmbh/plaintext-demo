@@ -20,6 +20,9 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 public class DemoBootApplication {
 
     public static void main(String[] args) {
+        if (ch.plaintext.demo.DemoReset.beforeStart(ch.plaintext.demo.DemoReset.dataDir())) {
+            System.out.println("plaintext-demo: database reset, starting empty");
+        }
         SpringApplication.run(DemoBootApplication.class, args);
     }
 }

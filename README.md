@@ -67,6 +67,7 @@ Building needs the root artifacts from GitHub Packages, i.e. a `settings.xml` wi
 | `DEMO_PORT` | `8080` | HTTP port |
 | `DEMO_DATA_DIR` | `./data` | where the H2 file lives |
 | `DEMO_BASE_URL` | `http://localhost:<port>` | public URL; the OIDC issuer and redirect URI derive from it |
+| `DEMO_RESET_CRON` | off | e.g. `0 30 3 * * *`: at that time the demo ends with exit code 75 and, on its next start, begins with an empty database that the demo data fill again — for an instance whose container restarts it |
 
 All passwords and the OAuth client secret in this repository are demo values, published on purpose.
 
