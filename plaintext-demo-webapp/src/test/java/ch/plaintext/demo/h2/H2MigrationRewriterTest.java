@@ -60,6 +60,12 @@ class H2MigrationRewriterTest {
     }
 
     @Test
+    void upsertDoNothingLosesItsConflictClause() {
+        String h2 = H2MigrationRewriter.rewrite("INSERT INTO a (t) SELECT t FROM b\nON CONFLICT (t) DO NOTHING;\n");
+        assertEquals("INSERT INTO a (t) SELECT t FROM b;\n", h2);
+    }
+
+    @Test
     void plainScriptStaysByteIdentical() {
         String sql = "-- comment; with semicolon\nCREATE TABLE a (id BIGSERIAL, v VARCHAR(10) DEFAULT 'x;y');\n";
         assertEquals(sql, H2MigrationRewriter.rewrite(sql));

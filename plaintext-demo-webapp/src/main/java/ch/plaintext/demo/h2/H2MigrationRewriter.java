@@ -17,6 +17,7 @@ import java.util.regex.Pattern;
  *       kept, guarded by {@code IF EXISTS}, and translated where H2 differs; the procedural rest goes.</li>
  *   <li>Statements using PostgreSQL-only internals ({@code ctid}, {@code setval}, {@code split_part})
  *       only clean up old data and are dropped.</li>
+ *   <li>{@code ON CONFLICT … DO NOTHING} is dropped: a fresh database has no conflicting rows.</li>
  *   <li>Partial indexes: a plain index loses its {@code WHERE}, a partial unique index is dropped
  *       (without the condition it would forbid re-creating a soft-deleted row).</li>
  * </ul>
@@ -26,6 +27,8 @@ public final class H2MigrationRewriter {
     private static final Pattern DO_BLOCK = Pattern.compile("(?is)\\bDO\\s+\\$\\$(.*?)\\$\\$\\s*;");
     private static final Pattern EXECUTE = Pattern.compile("(?is)EXECUTE\\s+'((?:[^']|'')*)'\\s*;?");
     private static final Pattern ALTER_TABLE = Pattern.compile("(?is)\\bALTER\\s+TABLE\\s+[^;]+");
+    /** H2 has no upsert clause; on a fresh database there is nothing to conflict with. DO UPDATE is left alone (fails loudly). */
+    private static final Pattern ON_CONFLICT_DO_NOTHING = Pattern.compile("(?is)\\s+ON\\s+CONFLICT\\s*(\\([^)]*\\))?\\s*DO\\s+NOTHING");
     private static final Pattern PRIMARY_KEY = Pattern.compile("(?i)\\bPRIMARY\\s+KEY\\b");
     private static final Pattern PG_ONLY =Pattern.compile("(?is)\\bctid\\b|\\bsetval\\s*\\(|\\bpg_get_serial_sequence\\s*\\(|\\bsplit_part\\s*\\(");
     private static final Pattern PARTIAL_INDEX = Pattern.compile("(?is)^CREATE\\s+(UNIQUE\\s+)?INDEX\\b(.*?)\\s+WHERE\\s+.*$");
@@ -36,6 +39,7 @@ public final class H2MigrationRewriter {
 
     public static String rewrite(String sql) {
         String s = DO_BLOCK.matcher(sql).replaceAll(m -> Matcher.quoteReplacement(doBlock(m.group(1))));
+        s = ON_CONFLICT_DO_NOTHING.matcher(s).replaceAll("");
         if (!PG_ONLY.matcher(s).find() && !PARTIAL_INDEX_ANYWHERE.matcher(s).find()) {
             return s;
         }
