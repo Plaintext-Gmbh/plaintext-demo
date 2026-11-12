@@ -13,9 +13,30 @@ import org.springframework.web.util.HtmlUtils;
 public class OAuthMockLoginController {
 
     private final OAuthMockProperties props;
+    private final org.springframework.beans.factory.ObjectProvider<ch.plaintext.i18n.web.I18nEL> i18n;
+    private final org.springframework.beans.factory.ObjectProvider<ch.plaintext.boot.plugins.jsf.userprofile.UserPreferencesBackingBean> prefs;
 
-    public OAuthMockLoginController(OAuthMockProperties props) {
+    public OAuthMockLoginController(OAuthMockProperties props,
+                                    org.springframework.beans.factory.ObjectProvider<ch.plaintext.i18n.web.I18nEL> i18n,
+                                    org.springframework.beans.factory.ObjectProvider<ch.plaintext.boot.plugins.jsf.userprofile.UserPreferencesBackingBean> prefs) {
         this.props = props;
+        this.i18n = i18n;
+        this.prefs = prefs;
+    }
+
+    /** German text in the visitor's language (root's i18n, i18n/plaintext-demo.csv). */
+    private String t(String german) {
+        var el = i18n.getIfAvailable();
+        return esc(el != null ? el.t(german) : german);
+    }
+
+    private String language() {
+        try {
+            var p = prefs.getIfAvailable();
+            return p != null && p.getLanguage() != null ? p.getLanguage() : "en";
+        } catch (RuntimeException e) {
+            return "en";
+        }
     }
 
     @GetMapping(value = OAuthMockConfig.LOGIN, produces = MediaType.TEXT_HTML_VALUE)
@@ -28,11 +49,13 @@ public class OAuthMockLoginController {
                     .append("</code> &ndash; ").append(esc(u.name())).append("</li>");
         }
         String error = request.getParameter("error") != null
-                ? "<p class=\"error\">Unknown user or wrong password.</p>" : "";
+                ? "<p class=\"error\">" + t("Ungültiger Benutzername oder Passwort") + "</p>" : "";
+        String lang = language();
+        String about = "de".equals(lang) ? "https://plaintext.ch/demo/" : "https://plaintext.ch/en/demo/";
         return """
                 <!DOCTYPE html>
-                <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-                <title>Demo IdP &ndash; plaintext-demo</title>
+                <html lang="%s"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+                <title>%s &ndash; plaintext-demo</title>
                 <style>
                 body{font-family:system-ui,sans-serif;background:#f4f6f8;margin:0;display:flex;min-height:100vh;align-items:center;justify-content:center}
                 main{background:#fff;padding:32px;border-radius:12px;box-shadow:0 2px 12px rgba(0,0,0,.08);width:min(380px,90vw)}
@@ -41,21 +64,23 @@ public class OAuthMockLoginController {
                 button{margin-top:18px;width:100%%;padding:11px;border:0;border-radius:6px;background:#2563eb;color:#fff;font-size:15px;cursor:pointer}
                 ul{padding-left:18px;font-size:14px}.error{color:#b91c1c;font-size:14px}.hint{font-size:13px;color:#555;margin-top:18px}
                 </style></head><body><main>
-                <h1>Demo identity provider</h1>
-                <p class="sub">A built-in OAuth2/OIDC server &ndash; stands in for Keycloak in plaintext-demo.</p>
+                <h1>%s</h1>
+                <p class="sub">%s</p>
                 %s
                 <form method="post" action="%s">
-                <label for="username">Username</label><input id="username" name="username" autofocus autocomplete="username">
-                <label for="password">Password</label><input id="password" name="password" type="password" autocomplete="current-password">
+                <label for="username">%s</label><input id="username" name="username" autofocus autocomplete="username">
+                <label for="password">%s</label><input id="password" name="password" type="password" autocomplete="current-password">
                 <input type="hidden" name="%s" value="%s">
-                <button type="submit">Sign in</button>
+                <button type="submit">%s</button>
                 </form>
-                <div class="hint">Demo accounts:<ul>%s</ul>
-                <a href="https://plaintext.ch/en/demo/">About plaintext-demo</a></div>
+                <div class="hint">%s<ul>%s</ul>
+                <a href="%s">%s</a></div>
                 </main></body></html>
-                """.formatted(error, request.getContextPath() + OAuthMockConfig.LOGIN,
+                """.formatted(esc(lang), t("Demo-Identitätsanbieter"), t("Demo-Identitätsanbieter"),
+                t("Ein eingebauter OAuth2/OIDC-Server, er ersetzt Keycloak in plaintext-demo."), error,
+                request.getContextPath() + OAuthMockConfig.LOGIN, t("Benutzername"), t("Passwort"),
                 csrf != null ? esc(csrf.getParameterName()) : "_csrf", csrf != null ? esc(csrf.getToken()) : "",
-                accounts);
+                t("Anmelden"), t("Demo-Konten:"), accounts, about, t("Über plaintext-demo"));
     }
 
     private static String esc(String s) {

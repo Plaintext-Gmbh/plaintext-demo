@@ -104,21 +104,22 @@ class DemoGuardTest {
 
         MockHttpServletResponse blocked = new MockHttpServletResponse();
         MockFilterChain chainBlocked = new MockFilterChain();
-        new DemoBlockedViewsFilter().doFilter(new MockHttpServletRequest("GET", "/sessions.html"), blocked, chainBlocked);
+        new DemoBlockedViewsFilter(x -> "EN:" + x, () -> "de").doFilter(new MockHttpServletRequest("GET", "/sessions.html"), blocked, chainBlocked);
         assertEquals(403, blocked.getStatus());
-        assertTrue(blocked.getContentAsString().contains("Not in the public demo"));
+        assertTrue(blocked.getContentAsString().contains("EN:" + org.springframework.web.util.HtmlUtils.htmlEscape(DemoBlockedViewsFilter.TITLE)));
+        assertTrue(blocked.getContentAsString().contains("https://plaintext.ch/demo/"), "German visitors get the German page");
         assertNull(chainBlocked.getRequest(), "the page itself is not rendered");
 
         MockFilterChain chainOpen = new MockFilterChain();
-        new DemoBlockedViewsFilter().doFilter(new MockHttpServletRequest("GET", "/demo-table.html"), new MockHttpServletResponse(), chainOpen);
+        new DemoBlockedViewsFilter(x -> x, () -> "en").doFilter(new MockHttpServletRequest("GET", "/demo-table.html"), new MockHttpServletResponse(), chainOpen);
         assertNotNull(chainOpen.getRequest());
     }
 
     @Test
     void refusalIsFoundInTheCauseChain() {
         Exception wrapped = new RuntimeException("commit failed", new IllegalStateException(
-                new DemoWriteGuard.DemoReadOnlyException("Not possible in the public demo: x")));
-        assertEquals("Not possible in the public demo: x", DemoExceptionHandlerFactory.refusal(wrapped));
+                new DemoWriteGuard.DemoReadOnlyException("x")));
+        assertEquals("x", DemoExceptionHandlerFactory.refusal(wrapped).getDetail());
         assertNull(DemoExceptionHandlerFactory.refusal(new RuntimeException("other")));
     }
 

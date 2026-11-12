@@ -43,8 +43,13 @@ public class DemoGuardConfig {
     }
 
     @Bean
-    FilterRegistrationBean<DemoBlockedViewsFilter> demoBlockedViews() {
-        FilterRegistrationBean<DemoBlockedViewsFilter> registration = new FilterRegistrationBean<>(new DemoBlockedViewsFilter());
+    FilterRegistrationBean<DemoBlockedViewsFilter> demoBlockedViews(
+            org.springframework.beans.factory.ObjectProvider<ch.plaintext.i18n.web.I18nEL> i18n,
+            org.springframework.beans.factory.ObjectProvider<ch.plaintext.boot.plugins.jsf.userprofile.UserPreferencesBackingBean> prefs) {
+        FilterRegistrationBean<DemoBlockedViewsFilter> registration = new FilterRegistrationBean<>(new DemoBlockedViewsFilter(
+                text -> { var el = i18n.getIfAvailable(); return el != null ? el.t(text) : text; },
+                () -> { try { var p = prefs.getIfAvailable(); return p != null && p.getLanguage() != null ? p.getLanguage() : "en"; }
+                        catch (RuntimeException e) { return "en"; } }));
         registration.setDispatcherTypes(DispatcherType.REQUEST, DispatcherType.FORWARD);
         return registration;
     }

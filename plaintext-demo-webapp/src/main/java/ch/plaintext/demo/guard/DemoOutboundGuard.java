@@ -15,8 +15,7 @@ public class DemoOutboundGuard {
     @Before("execution(* ch.plaintext.oidc.service.OidcConfigService.testConnection(..))")
     public void refuseOidcConnectionTest() {
         if (DemoWriteGuard.enabled) {
-            throw new DemoWriteGuard.DemoReadOnlyException(
-                    "Not possible in the public demo: connection test to an identity provider (outgoing request).");
+            throw new DemoWriteGuard.DemoReadOnlyException("connection test to an identity provider (outgoing request)");
         }
     }
 }

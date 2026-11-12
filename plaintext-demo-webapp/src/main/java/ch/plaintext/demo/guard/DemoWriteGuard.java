@@ -137,14 +137,22 @@ public class DemoWriteGuard implements PreInsertEventListener, PreUpdateEventLis
     }
 
     private static void refuse(String what) {
-        throw new DemoReadOnlyException("Not possible in the public demo: " + what
-                + ". Everything is reset every night; run it locally to try everything.");
+        throw new DemoReadOnlyException(what);
     }
 
-    /** Thrown when the demo refuses a write. */
+    /** Thrown when the demo refuses a write. The page shows {@link #KEY} and {@link #HINT} translated, plus the detail. */
     public static class DemoReadOnlyException extends RuntimeException {
-        public DemoReadOnlyException(String message) {
-            super(message);
+        public static final String KEY = "In der öffentlichen Demo nicht möglich";
+        public static final String HINT = "Die Demo wird jede Nacht zurückgesetzt. Lokal gestartet lässt sich alles ausprobieren.";
+        private final String detail;
+
+        public DemoReadOnlyException(String detail) {
+            super(KEY + ": " + detail);
+            this.detail = detail;
+        }
+
+        public String getDetail() {
+            return detail;
         }
     }
 }

@@ -28,6 +28,12 @@
             <scope>provided</scope>
         </dependency>
         <dependency>
+            <!-- root's i18n (I18nEL) and the visitor's language for the sign-in page -->
+            <groupId>ch.plaintext.v2</groupId>
+            <artifactId>plaintext-root-webapp</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>

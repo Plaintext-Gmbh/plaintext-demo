@@ -31,10 +31,12 @@ public class DemoExceptionHandlerFactory extends ExceptionHandlerFactory {
         public void handle() {
             Iterator<ExceptionQueuedEvent> events = getUnhandledExceptionQueuedEvents().iterator();
             while (events.hasNext()) {
-                String refusal = refusal(events.next().getContext().getException());
+                DemoWriteGuard.DemoReadOnlyException refusal = refusal(events.next().getContext().getException());
                 if (refusal != null) {
-                    FacesContext.getCurrentInstance().addMessage(null,
-                            new FacesMessage(FacesMessage.SEVERITY_WARN, "Public demo", refusal));
+                    FacesContext ctx = FacesContext.getCurrentInstance();
+                    ctx.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, t(ctx, "Öffentliche Demo"),
+                            t(ctx, DemoWriteGuard.DemoReadOnlyException.KEY) + ": " + refusal.getDetail() + ". "
+                                    + t(ctx, DemoWriteGuard.DemoReadOnlyException.HINT)));
                     events.remove();
                 }
             }
@@ -42,13 +44,26 @@ public class DemoExceptionHandlerFactory extends ExceptionHandlerFactory {
         }
     }
 
-    /** The guard's message somewhere in the cause chain, otherwise null. */
-    static String refusal(Throwable t) {
+    /** The guard's refusal somewhere in the cause chain, otherwise null. */
+    static DemoWriteGuard.DemoReadOnlyException refusal(Throwable t) {
         for (Throwable c = t; c != null; c = c.getCause() == c ? null : c.getCause()) {
-            if (c instanceof DemoWriteGuard.DemoReadOnlyException) {
-                return c.getMessage();
+            if (c instanceof DemoWriteGuard.DemoReadOnlyException refusal) {
+                return refusal;
             }
         }
         return null;
+    }
+
+    /** root's i18n in the user's language; the German text if it is not available. */
+    static String t(FacesContext ctx, String german) {
+        try {
+            Object i18n = ctx.getApplication().evaluateExpressionGet(ctx, "#{i18n}", Object.class);
+            if (i18n instanceof ch.plaintext.i18n.web.I18nEL el) {
+                return el.t(german);
+            }
+        } catch (RuntimeException e) {
+            // fall back to German
+        }
+        return german;
     }
 }
