@@ -10,8 +10,6 @@ import ch.plaintext.demo.tabelle.DemoProductRepository;
 import ch.plaintext.oidc.entity.OidcConfig;
 import ch.plaintext.oidc.repository.OidcConfigRepository;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.boot.context.event.ApplicationReadyEvent;
-import org.springframework.context.event.EventListener;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,7 +19,7 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- * Fills an empty demo database: the four demo users, the two mandates (they come from the users'
+ * Fills an empty demo database (called by {@link DemoDatenStart} before the web server takes requests): the four demo users, the two mandates (they come from the users'
  * mandate), the OIDC configuration pointing at the built-in IdP, and the demo rows. Idempotent —
  * runs on every start and only adds what is missing; the OIDC issuer is refreshed, because it
  * depends on the base URL the instance runs under.
@@ -58,7 +56,6 @@ public class DemoDatenLoader {
         this.oauthMock = oauthMock;
     }
 
-    @EventListener(ApplicationReadyEvent.class)
     @Transactional
     public void fill() {
         int newUsers = 0;
