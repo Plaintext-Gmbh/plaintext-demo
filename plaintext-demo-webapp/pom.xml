@@ -42,6 +42,14 @@
             <version>${project.version}</version>
         </dependency>
         <dependency>
+            <!-- Modules declare the MCP server provided (like in plaintext-app, Karte 1721); without it a
+                 module with MCP tools (e.g. drawio on demo.plaintext.ch) does not load. /mcp stays behind
+                 root's bearer filter, and the demo issues no tokens. -->
+            <groupId>org.springframework.ai</groupId>
+            <artifactId>spring-ai-starter-mcp-server-webmvc</artifactId>
+            <version>2.0.2</version>
+        </dependency>
+        <dependency>
             <groupId>com.h2database</groupId>
             <artifactId>h2</artifactId>
         </dependency>
@@ -57,6 +65,11 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+                <configuration>
+                    <!-- PropertiesLauncher: an instance can add module jars with -Dloader.path=<dir>
+                         (demo.plaintext.ch adds modules that are not part of this public repo). -->
+                    <layout>ZIP</layout>
+                </configuration>
             </plugin>
         </plugins>
     </build>
