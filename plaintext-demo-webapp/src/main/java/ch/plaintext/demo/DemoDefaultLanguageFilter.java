@@ -44,7 +44,8 @@ public class DemoDefaultLanguageFilter implements Filter {
 
     private static boolean isPage(HttpServletRequest request) {
         String uri = request.getRequestURI();
-        return "GET".equals(request.getMethod()) && (uri.endsWith(".html") || uri.endsWith(".xhtml") || uri.endsWith("/"));
+        return "GET".equals(request.getMethod()) && (uri.endsWith(".html") || uri.endsWith(".xhtml") || uri.endsWith("/")
+                || uri.endsWith("/oauth-mock/login"));
     }
 
     private static boolean isAnonymous() {

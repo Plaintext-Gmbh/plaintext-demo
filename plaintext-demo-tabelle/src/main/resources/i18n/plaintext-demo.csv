@@ -106,3 +106,34 @@ Bestellt;fr;Commandé
 Bestellt;it;Ordinato
 Ausgelaufen;fr;Abandonné
 Ausgelaufen;it;Fuori produzione
+# Waechter, Mock-Login (Daniel 12.11.: alles vierspraachig)
+In der öffentlichen Demo nicht verfügbar;en;Not available in the public demo
+In der öffentlichen Demo nicht verfügbar;fr;Non disponible dans la démo publique
+In der öffentlichen Demo nicht verfügbar;it;Non disponibile nella demo pubblica
+Hier sind alle mit denselben Demo-Konten angemeldet, darum ist diese Seite ausgeschaltet. Starten Sie plaintext-demo auf Ihrem eigenen Rechner, um sie auszuprobieren.;en;Everyone is signed in with the same demo accounts here, so this page is switched off. Start plaintext-demo on your own computer to try it.
+Hier sind alle mit denselben Demo-Konten angemeldet, darum ist diese Seite ausgeschaltet. Starten Sie plaintext-demo auf Ihrem eigenen Rechner, um sie auszuprobieren.;fr;Ici, tout le monde utilise les mêmes comptes de démo, cette page est donc désactivée. Lancez plaintext-demo sur votre ordinateur pour l'essayer.
+Hier sind alle mit denselben Demo-Konten angemeldet, darum ist diese Seite ausgeschaltet. Starten Sie plaintext-demo auf Ihrem eigenen Rechner, um sie auszuprobieren.;it;Qui tutti accedono con gli stessi account demo, perciò questa pagina è disattivata. Avvia plaintext-demo sul tuo computer per provarla.
+Zurück zur Demo;en;Back to the demo
+Zurück zur Demo;fr;Retour à la démo
+Zurück zur Demo;it;Torna alla demo
+Über plaintext-demo;en;About plaintext-demo
+Über plaintext-demo;fr;À propos de plaintext-demo
+Über plaintext-demo;it;Informazioni su plaintext-demo
+In der öffentlichen Demo nicht möglich;en;Not possible in the public demo
+In der öffentlichen Demo nicht möglich;fr;Impossible dans la démo publique
+In der öffentlichen Demo nicht möglich;it;Non possibile nella demo pubblica
+Die Demo wird jede Nacht zurückgesetzt. Lokal gestartet lässt sich alles ausprobieren.;en;The demo is reset every night. Start it locally to try everything.
+Die Demo wird jede Nacht zurückgesetzt. Lokal gestartet lässt sich alles ausprobieren.;fr;La démo est réinitialisée chaque nuit. Lancez-la en local pour tout essayer.
+Die Demo wird jede Nacht zurückgesetzt. Lokal gestartet lässt sich alles ausprobieren.;it;La demo viene ripristinata ogni notte. Avviala in locale per provare tutto.
+Öffentliche Demo;en;Public demo
+Öffentliche Demo;fr;Démo publique
+Öffentliche Demo;it;Demo pubblica
+Demo-Identitätsanbieter;en;Demo identity provider
+Demo-Identitätsanbieter;fr;Fournisseur d'identité de démo
+Demo-Identitätsanbieter;it;Provider di identità demo
+Ein eingebauter OAuth2/OIDC-Server, er ersetzt Keycloak in plaintext-demo.;en;A built-in OAuth2/OIDC server, it stands in for Keycloak in plaintext-demo.
+Ein eingebauter OAuth2/OIDC-Server, er ersetzt Keycloak in plaintext-demo.;fr;Un serveur OAuth2/OIDC intégré, il remplace Keycloak dans plaintext-demo.
+Ein eingebauter OAuth2/OIDC-Server, er ersetzt Keycloak in plaintext-demo.;it;Un server OAuth2/OIDC integrato, sostituisce Keycloak in plaintext-demo.
+Demo-Konten:;en;Demo accounts:
+Demo-Konten:;fr;Comptes de démo :
+Demo-Konten:;it;Account demo:
