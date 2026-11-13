@@ -7,7 +7,7 @@
     <parent>
         <groupId>ch.plaintext.v2</groupId>
         <artifactId>plaintext-root-parent</artifactId>
-        <version>3.23.0</version>
+        <version>3.28.0</version>
         <relativePath/>
     </parent>
 
@@ -19,7 +19,7 @@
     <description>Public demo application on plaintext-root</description>
 
     <properties>
-        <plaintext-root.version>3.23.0</plaintext-root.version>
+        <plaintext-root.version>3.28.0</plaintext-root.version>
     </properties>
 
     <modules>
