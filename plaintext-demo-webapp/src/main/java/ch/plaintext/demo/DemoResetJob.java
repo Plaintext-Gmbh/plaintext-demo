@@ -31,6 +31,7 @@ public class DemoResetJob {
     public void reset() throws IOException {
         DemoReset.request(DemoReset.dataDir());
         log.warn("plaintext-demo: nightly reset - restarting with an empty database");
-        System.exit(SpringApplication.exit(context, () -> EXIT_RESTART));
+        // Own thread: closing the context from a scheduler thread interrupts it (Hikari logged "Interrupted during closing").
+        new Thread(() -> System.exit(SpringApplication.exit(context, () -> EXIT_RESTART)), "demo-reset").start();
     }
 }
