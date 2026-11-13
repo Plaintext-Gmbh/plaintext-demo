@@ -27,6 +27,9 @@ logging:
     ch.plaintext.demo: INFO
 
 plaintext:
+  i18n:
+    # root >= 3.26.0 (root-v2 #37): English before login and for users without saved preferences.
+    default-language: en
   login:
     # Daniel 12.11. (Karte 2042 B, root >= 3.22.0): no own form - the login page goes straight to the
     # single identity provider, the built-in demo IdP, whose page shows the demo accounts.
