@@ -30,7 +30,6 @@ plaintext:
   login:
     # Daniel 12.11. (Karte 2042 B, root >= 3.22.0): no own form - the login page goes straight to the
     # single identity provider, the built-in demo IdP, whose page shows the demo accounts.
-    # chef 13.11.: switched on only with the root release that contains root-v2 #35 (in root <= 3.22.0
-    # the login page also redirects after ?logout, so switching accounts would loop back to the IdP).
-    form: true
-    auto-redirect-single-idp: false
+    # root >= 3.23.0 (root-v2 #35): no redirect after ?logout / ?error, so switching accounts works.
+    form: false
+    auto-redirect-single-idp: true
