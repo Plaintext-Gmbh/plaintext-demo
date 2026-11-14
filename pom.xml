@@ -21,7 +21,7 @@
     <properties>
         <plaintext-root.version>3.32.0</plaintext-root.version>
         <!-- Karte 2096: oeffentliches Modul «Notizen» (Plaintext-Gmbh/plaintext-modul-notizen, plaintext-mvn) -->
-        <plaintext-modul-notizen.version>1.0.1</plaintext-modul-notizen.version>
+        <plaintext-modul-notizen.version>1.0.2</plaintext-modul-notizen.version>
     </properties>
 
     <modules>
