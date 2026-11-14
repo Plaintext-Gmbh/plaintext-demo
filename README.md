@@ -39,13 +39,19 @@ in the user settings.
 |--------|---------|
 | `plaintext-demo-webapp` | The application: plaintext-root on H2 (`config/application.yml`), plus the H2 adapter for root's PostgreSQL migrations |
 | `plaintext-demo-oauth-mock` | Built-in OAuth2/OIDC server (Spring Authorization Server) with configurable users and Keycloak-shaped endpoints below `/oauth-mock` |
-| `plaintext-demo-daten` | Fills an empty database: users, tenants, the OIDC configuration, sample rows |
+| `plaintext-demo-daten` | Fills an empty database: users, tenants, the OIDC configuration, sample rows, a sample note per account; registers the demo's file store |
 | `plaintext-demo-tabelle` | The demo table — every variant of root's configurable table `pt:tableSettings` |
 
 **H2 instead of PostgreSQL.** plaintext-root writes its Flyway migrations for PostgreSQL. The demo
 reads them through `H2MigrationRewriter` at load time (only on H2; the files stay unchanged), and
 `H2MigrationRewriterTest` runs every migration on the classpath into a fresh H2 — it fails as soon
 as root ships syntax the adapter does not cover.
+
+**Notes module.** The demo includes [plaintext-modul-notizen](https://github.com/Plaintext-Gmbh/plaintext-modul-notizen)
+as an example of an installable module (menu, dashboard tile, settings page, four languages): notes with autosave,
+a mini editor and their own window. The notes are Markdown files in a plaintext-root file store of type «Local file»
+(`LokaleDateiAblage`) below `${DEMO_DATA_DIR}/ablagen`; the nightly reset empties that folder and every account gets
+its sample note back.
 
 ## Workbench for root
 
