@@ -24,6 +24,11 @@
             <version>${project.version}</version>
         </dependency>
         <dependency>
+            <groupId>ch.plaintext</groupId>
+            <artifactId>plaintext-modul-notizen</artifactId>
+            <version>${plaintext-modul-notizen.version}</version>
+        </dependency>
+        <dependency>
             <groupId>ch.plaintext.v2</groupId>
             <artifactId>plaintext-root-webapp</artifactId>
             <scope>provided</scope>

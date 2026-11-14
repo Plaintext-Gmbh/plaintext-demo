@@ -17,6 +17,9 @@ server:
   port: ${DEMO_PORT:8080}
 
 demo:
+  ablagen:
+    # Card 2096: file stores of the demo (notes module), next to the H2 database; emptied by the nightly reset.
+    basis: ${DEMO_DATA_DIR:./data}/ablagen
   oauth-mock:
     # Public URL of this instance; the OIDC issuer and the redirect URI are derived from it.
     base-url: ${DEMO_BASE_URL:http://localhost:${server.port}}

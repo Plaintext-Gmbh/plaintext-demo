@@ -16,6 +16,8 @@ import java.util.stream.Stream;
 public final class DemoReset {
 
     static final String MARKER = ".reset-requested";
+    /** Card 2096: the demo's file stores (notes); emptied with the database, the sample note comes back at start. */
+    static final String ABLAGEN = "ablagen";
 
     private DemoReset() {
     }
@@ -38,6 +40,7 @@ public final class DemoReset {
                     Files.delete(f);
                 }
             }
+            loescheOrdner(dataDir.resolve(ABLAGEN));
         } catch (IOException e) {
             throw new UncheckedIOException("plaintext-demo: reset failed in " + dataDir, e);
         }
@@ -47,5 +50,17 @@ public final class DemoReset {
     static void request(Path dataDir) throws IOException {
         Files.createDirectories(dataDir);
         Files.writeString(dataDir.resolve(MARKER), "requested\n");
+    }
+
+    /** Deletes a folder with its content; Files.walk does not follow symlinks, so only the link itself goes. */
+    private static void loescheOrdner(Path ordner) throws IOException {
+        if (!Files.isDirectory(ordner, java.nio.file.LinkOption.NOFOLLOW_LINKS)) {
+            return;
+        }
+        try (Stream<Path> alle = Files.walk(ordner)) {
+            for (Path p : alle.sorted(java.util.Comparator.reverseOrder()).toList()) {
+                Files.delete(p);
+            }
+        }
     }
 }

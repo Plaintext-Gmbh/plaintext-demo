@@ -37,4 +37,17 @@ class DemoResetTest {
     void missingDataDirectoryIsNoReset(@TempDir Path dir) {
         assertFalse(DemoReset.beforeStart(dir.resolve("noch-nicht-da")));
     }
+
+    @Test
+    void markerAlsoEmptiesTheFileStores_withoutMarkerTheyStay(@TempDir Path dir) throws Exception {
+        Path notiz = dir.resolve(DemoReset.ABLAGEN).resolve("notizen/notizen/default/user.md");
+        Files.createDirectories(notiz.getParent());
+        Files.writeString(notiz, "# Notiz");
+        assertFalse(DemoReset.beforeStart(dir));
+        assertTrue(Files.exists(notiz));
+
+        DemoReset.request(dir);
+        assertTrue(DemoReset.beforeStart(dir));
+        assertFalse(Files.exists(dir.resolve(DemoReset.ABLAGEN)));
+    }
 }

@@ -12,13 +12,19 @@ import org.springframework.stereotype.Component;
 public class DemoDatenStart implements SmartInitializingSingleton {
 
     private final DemoDatenLoader loader;
+    private final DemoNotizen notizen;
 
-    public DemoDatenStart(DemoDatenLoader loader) {
+    public DemoDatenStart(DemoDatenLoader loader, DemoNotizen notizen) {
         this.loader = loader;
+        this.notizen = notizen;
     }
 
     @Override
     public void afterSingletonsInstantiated() {
         loader.fill();
+        java.util.Map<String, String> mandate = new java.util.LinkedHashMap<>();
+        DemoDatenLoader.USERS.forEach((name, user) -> mandate.put(name, user.mandat()));
+        org.slf4j.LoggerFactory.getLogger(DemoDatenStart.class)
+                .info("plaintext-demo: {} sample note(s) written", notizen.beispielnotizen(mandate));
     }
 }
