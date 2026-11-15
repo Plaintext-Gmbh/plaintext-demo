@@ -137,3 +137,10 @@ Ein eingebauter OAuth2/OIDC-Server, er ersetzt Keycloak in plaintext-demo.;it;Un
 Demo-Konten:;en;Demo accounts:
 Demo-Konten:;fr;Comptes de démo :
 Demo-Konten:;it;Account demo:
+# Karte 2295: Mandatsnamen uebersetzbar (Anzeige im Topbar-Dropdown ueber i18n.tOrKey).
+default;en;Default
+default;fr;Défaut
+default;it;Predefinito
+extra;en;Extra
+extra;fr;Extra
+extra;it;Extra
