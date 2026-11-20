@@ -31,8 +31,11 @@ import org.springframework.security.oauth2.server.authorization.token.JwtEncodin
 import org.springframework.security.oauth2.server.authorization.token.OAuth2TokenCustomizer;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.access.AccessDeniedHandler;
+import org.springframework.security.web.access.AccessDeniedHandlerImpl;
 import org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint;
 import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
+import org.springframework.security.web.csrf.CsrfException;
 import org.springframework.security.web.savedrequest.HttpSessionRequestCache;
 import org.springframework.security.web.servlet.util.matcher.PathPatternRequestMatcher;
 
@@ -83,8 +86,26 @@ public class OAuthMockConfig {
                 .requestCache(c -> c.requestCache(requests))
                 .authorizeHttpRequests(a -> a.requestMatchers(LOGIN).permitAll().anyRequest().authenticated())
                 .formLogin(f -> f.loginPage(LOGIN).permitAll())
-                .exceptionHandling(e -> e.authenticationEntryPoint(new LoginUrlAuthenticationEntryPoint(LOGIN)));
+                .exceptionHandling(e -> e.authenticationEntryPoint(new LoginUrlAuthenticationEntryPoint(LOGIN))
+                        .accessDeniedHandler(signInAgainOnStaleForm()));
         return http.build();
+    }
+
+    /**
+     * A sign-in form whose CSRF token is no longer valid (second click while the first sign-in is
+     * still completing, or the back button) starts the sign-in over instead of a bare 403: the first
+     * sign-in rotated the token (Karte 2417). Every other denial stays a 403.
+     */
+    static AccessDeniedHandler signInAgainOnStaleForm() {
+        AccessDeniedHandler standard = new AccessDeniedHandlerImpl();
+        return (request, response, denied) -> {
+            if (denied instanceof CsrfException && "POST".equals(request.getMethod())
+                    && (request.getContextPath() + LOGIN).equals(request.getRequestURI())) {
+                response.sendRedirect(request.getContextPath() + "/oauth2/authorization/" + REGISTRATION_ID);
+            } else {
+                standard.handle(request, response, denied);
+            }
+        };
     }
 
     private static UserDetailsService users(OAuthMockProperties props) {
