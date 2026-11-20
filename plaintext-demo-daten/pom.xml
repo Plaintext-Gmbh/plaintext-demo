@@ -19,9 +19,9 @@
             <version>${project.version}</version>
         </dependency>
         <dependency>
-            <groupId>ch.plaintext.demo</groupId>
-            <artifactId>plaintext-demo-tabelle</artifactId>
-            <version>${project.version}</version>
+            <groupId>ch.plaintext</groupId>
+            <artifactId>plaintext-modul-demo</artifactId>
+            <version>${plaintext-modul-demo.version}</version>
         </dependency>
         <dependency>
             <groupId>ch.plaintext</groupId>
