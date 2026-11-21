@@ -58,7 +58,8 @@ its sample note back.
 **Locks.** The online demo (demo.plaintext.ch) blocks writes and a few admin pages, the code default
 (`DEMO_GUARD=true`). A demo started with `start.sh` is yours: everything is open (`DEMO_GUARD=false`).
 `--guard` (or `DEMO_GUARD=true`) keeps the online locks. With `java -jar` directly, set
-`DEMO_GUARD=false` yourself.
+`DEMO_GUARD=false` yourself. Under the Spring profile `prod` (the online instance) the locks are always on;
+`DEMO_GUARD=false` is ignored there.
 
 **Login.** `--login` (or `DEMO_LOGIN`) picks how you sign in; it sets the Spring profile:
 
