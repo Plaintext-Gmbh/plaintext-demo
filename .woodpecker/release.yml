@@ -1,0 +1,15 @@
+# Release per Git-Tag vX.Y.Z (Karte 2412, vorher GitHub Actions release.yml): Bau mit Tests,
+# plaintext-demo-X.Y.Z.jar (+ .sha256) an das GitHub-Release. start.sh laedt das Jar des neuesten Release.
+# Secret, NUR fuer das Ereignis tag (kein PR-Lauf sieht es): github_release_token (Recht contents:write).
+when:
+  - event: tag
+    ref: refs/tags/v*
+
+steps:
+  release:
+    image: maven:3.10-eclipse-temurin-25
+    environment:
+      GITHUB_RELEASE_TOKEN:
+        from_secret: github_release_token
+    commands:
+      - bash ci/release.sh

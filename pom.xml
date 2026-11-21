@@ -47,7 +47,12 @@
     </dependencyManagement>
 
     <repositories>
-        <!-- root artifacts are published to GitHub Packages (needs a token with read:packages). -->
+        <!-- Reposilite (LAN, reading needs no login): root and the modules, used by Woodpecker. -->
+        <repository>
+            <id>plaintext-nas</id>
+            <url>https://maven.plaintext.ch/releases</url>
+        </repository>
+        <!-- root artifacts are also published to GitHub Packages (needs a token with read:packages). -->
         <repository>
             <id>plaintext</id>
             <url>https://maven.pkg.github.com/Plaintext-Gmbh/plaintext-mvn</url>

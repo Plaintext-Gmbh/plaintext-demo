@@ -1,0 +1,15 @@
+# Bau und Tests (Karte 2412, vorher GitHub Actions ci.yml). Laeuft im LAN-Runner, weil
+# maven.plaintext.ch nur dort erreichbar ist. Keine Secrets: Lesen aus Reposilite braucht keine Anmeldung.
+when:
+  - event: pull_request
+  - event: push
+    branch: main
+  - event: manual
+
+steps:
+  bauen:
+    image: maven:3.10-eclipse-temurin-25
+    commands:
+      - mvn -B -Dmaven.build.cache.enabled=false clean verify
+      - sh -n start.sh
+      - bash -n ci/release.sh
