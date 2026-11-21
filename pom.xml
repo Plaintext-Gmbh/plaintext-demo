@@ -7,7 +7,7 @@
     <parent>
         <groupId>ch.plaintext.v2</groupId>
         <artifactId>plaintext-root-parent</artifactId>
-        <version>3.44.0</version>
+        <version>3.58.0</version>
         <relativePath/>
     </parent>
 
@@ -19,14 +19,14 @@
     <description>Public demo application on plaintext-root</description>
 
     <properties>
-        <plaintext-root.version>3.44.0</plaintext-root.version>
+        <plaintext-root.version>3.58.0</plaintext-root.version>
         <!-- Karte 2096: oeffentliches Modul «Notizen» (Plaintext-Gmbh/plaintext-modul-notizen, plaintext-mvn) -->
-        <plaintext-modul-notizen.version>1.0.2</plaintext-modul-notizen.version>
+        <plaintext-modul-notizen.version>1.1.0</plaintext-modul-notizen.version>
+        <plaintext-modul-demo.version>1.0.0</plaintext-modul-demo.version>
     </properties>
 
     <modules>
         <module>plaintext-demo-oauth-mock</module>
-        <module>plaintext-demo-tabelle</module>
         <module>plaintext-demo-daten</module>
         <module>plaintext-demo-webapp</module>
     </modules>
