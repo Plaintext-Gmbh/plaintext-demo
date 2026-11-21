@@ -1,0 +1,19 @@
+# Karte 2418, self-hosted demo: built-in IdP off, an own OIDC server instead (e.g. Keycloak).
+# Start: ./start.sh --login oidc   (or SPRING_PROFILES_ACTIVE=login-oidc)
+# Issuer, client and secret are required; without them the start fails with "Could not resolve placeholder".
+# Register the redirect URI <DEMO_BASE_URL>/login/oauth2/code/own-idp at the OIDC server.
+demo:
+  oauth-mock:
+    enabled: false
+  oidc:
+    issuer-url: ${DEMO_OIDC_ISSUER}
+    client-id: ${DEMO_OIDC_CLIENT_ID}
+    client-secret: ${DEMO_OIDC_CLIENT_SECRET}
+    button-label: ${DEMO_OIDC_BUTTON_LABEL:Sign in}
+    username-attribute: ${DEMO_OIDC_USERNAME_ATTRIBUTE:preferred_username}
+    auto-create-users: ${DEMO_OIDC_AUTO_CREATE_USERS:false}
+
+plaintext:
+  login:
+    form: false
+    auto-redirect-single-idp: true

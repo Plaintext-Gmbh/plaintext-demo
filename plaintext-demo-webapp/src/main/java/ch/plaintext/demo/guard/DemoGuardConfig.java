@@ -13,15 +13,28 @@ import org.springframework.boot.hibernate.autoconfigure.HibernatePropertiesCusto
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.env.Environment;
+import org.springframework.core.env.Profiles;
 
 import java.util.List;
 
-/** Wires the demo guard: Hibernate write listeners and the blocked-pages filter. DEMO_GUARD=false turns both off. */
+/**
+ * Wires the demo guard: Hibernate write listeners and the blocked-pages filter. DEMO_GUARD=false turns both off,
+ * except under the profile prod (demo.plaintext.ch, never start.sh): there the guard is always on (Karte 2418).
+ */
 @Configuration
 public class DemoGuardConfig {
 
-    public DemoGuardConfig(@Value("${demo.guard:true}") boolean enabled) {
-        DemoWriteGuard.enabled = enabled;
+    public DemoGuardConfig(@Value("${demo.guard:true}") boolean enabled, Environment env) {
+        DemoWriteGuard.enabled = enabled(enabled, env);
+    }
+
+    static boolean enabled(boolean setting, Environment env) {
+        if (!setting && env.acceptsProfiles(Profiles.of("prod"))) {
+            org.slf4j.LoggerFactory.getLogger(DemoGuardConfig.class).warn("plaintext-demo: DEMO_GUARD=false ignored, profile prod keeps the guard on");
+            return true;
+        }
+        return setting;
     }
 
     @Bean

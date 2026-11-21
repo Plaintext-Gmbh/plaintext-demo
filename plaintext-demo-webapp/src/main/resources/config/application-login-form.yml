@@ -1,0 +1,10 @@
+# Karte 2418, self-hosted demo: built-in IdP off, root's own sign-in form with the demo accounts.
+# Start: ./start.sh --login form   (or SPRING_PROFILES_ACTIVE=login-form)
+demo:
+  oauth-mock:
+    enabled: false
+
+plaintext:
+  login:
+    form: true
+    auto-redirect-single-idp: false

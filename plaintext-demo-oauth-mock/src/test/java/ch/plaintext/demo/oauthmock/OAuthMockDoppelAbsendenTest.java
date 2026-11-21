@@ -41,7 +41,7 @@ class OAuthMockDoppelAbsendenTest {
     @Configuration
     @EnableWebMvc
     @EnableWebSecurity
-    @Import({OAuthMockConfig.class, OAuthMockLoginController.class})
+    @Import({OAuthMockPropertiesConfig.class, OAuthMockConfig.class, OAuthMockLoginController.class})
     static class Beans {
         @Bean
         PasswordEncoder passwordEncoder() {

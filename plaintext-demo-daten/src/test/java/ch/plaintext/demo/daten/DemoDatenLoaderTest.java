@@ -48,7 +48,7 @@ class DemoDatenLoaderTest {
         UserPrefsSimpleStorage prefs = mock(UserPrefsSimpleStorage.class);
         OAuthMockProperties mock = new OAuthMockProperties();
 
-        new DemoDatenLoader(users, encoder, oidc, products, prefs, mock).fill();
+        new DemoDatenLoader(users, encoder, oidc, products, prefs, mock, new DemoOidcProperties()).fill();
         verify(users, times(4)).save(any(MyUserEntity.class));
         verify(oidc).save(any(OidcConfig.class));
         verify(products, times(2)).saveAll(anyIterable());
@@ -56,10 +56,65 @@ class DemoDatenLoaderTest {
         // second start: everything there already
         when(users.findByUsername(anyString())).thenReturn(new MyUserEntity());
         when(products.countByMandat(anyString())).thenReturn(1L);
-        DemoDatenLoader wieder = new DemoDatenLoader(users, encoder, oidc, products, prefs, mock);
+        DemoDatenLoader wieder = new DemoDatenLoader(users, encoder, oidc, products, prefs, mock, new DemoOidcProperties());
         wieder.fill();
         verify(users, times(4)).save(any(MyUserEntity.class));
         verify(products, times(2)).saveAll(anyIterable());
+    }
+
+    /** Karte 2418: which OIDC entries the loader saves, per login mode. */
+    private static List<OidcConfig> gespeichert(OAuthMockProperties mock, DemoOidcProperties own, List<OidcConfig> vorhanden) {
+        MyUserRepository users = mock(MyUserRepository.class);
+        when(users.findByUsername(anyString())).thenReturn(new MyUserEntity());
+        OidcConfigRepository oidc = mock(OidcConfigRepository.class);
+        when(oidc.findAll()).thenReturn(vorhanden);
+        DemoProductRepository products = mock(DemoProductRepository.class);
+        when(products.countByMandat(anyString())).thenReturn(1L);
+        new DemoDatenLoader(users, mock(PasswordEncoder.class), oidc, products, mock(UserPrefsSimpleStorage.class), mock, own).fill();
+        org.mockito.ArgumentCaptor<OidcConfig> saved = org.mockito.ArgumentCaptor.forClass(OidcConfig.class);
+        verify(oidc, org.mockito.Mockito.atLeast(0)).save(saved.capture());
+        return saved.getAllValues();
+    }
+
+    @Test
+    void builtinLoginKeepsTheDemoIdpAndNoOwnIdp() {
+        List<OidcConfig> s = gespeichert(new OAuthMockProperties(), new DemoOidcProperties(), List.of());
+        assertThat(s).extracting(OidcConfig::getName).containsExactly(DemoDatenLoader.OIDC_NAME);
+        assertThat(s.get(0).isEnabled()).isTrue();
+    }
+
+    @Test
+    void formLoginSwitchesTheDemoIdpOff() {
+        OAuthMockProperties aus = new OAuthMockProperties();
+        aus.setEnabled(false);
+        List<OidcConfig> s = gespeichert(aus, new DemoOidcProperties(), List.of());
+        assertThat(s).hasSize(1);
+        assertThat(s.get(0).isEnabled()).isFalse();
+    }
+
+    @Test
+    void ownIdpIsStoredFromTheSettings() {
+        OAuthMockProperties aus = new OAuthMockProperties();
+        aus.setEnabled(false);
+        DemoOidcProperties own = new DemoOidcProperties();
+        own.setIssuerUrl("https://kc.example.org/realms/demo/");
+        own.setClientId("demo");
+        own.setClientSecret("s");
+        List<OidcConfig> s = gespeichert(aus, own, List.of());
+        OidcConfig eigen = s.stream().filter(c -> DemoDatenLoader.OWN_OIDC_NAME.equals(c.getName())).findFirst().orElseThrow();
+        assertThat(eigen.isEnabled()).isTrue();
+        assertThat(eigen.getIssuerUrl()).isEqualTo("https://kc.example.org/realms/demo");
+        assertThat(eigen.getClientId()).isEqualTo("demo");
+        assertThat(eigen.isAutoCreateUsers()).isFalse();
+    }
+
+    @Test
+    void ownIdpIsSwitchedOffWhenNoLongerConfigured() {
+        OidcConfig alt = new OidcConfig();
+        alt.setName(DemoDatenLoader.OWN_OIDC_NAME);
+        alt.setEnabled(true);
+        gespeichert(new OAuthMockProperties(), new DemoOidcProperties(), List.of(alt));
+        assertThat(alt.isEnabled()).isFalse();
     }
 
     @Test
