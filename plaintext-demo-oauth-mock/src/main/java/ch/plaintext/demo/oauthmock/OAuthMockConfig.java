@@ -5,7 +5,7 @@ import com.nimbusds.jose.jwk.RSAKey;
 import com.nimbusds.jose.jwk.source.ImmutableJWKSet;
 import com.nimbusds.jose.jwk.source.JWKSource;
 import com.nimbusds.jose.proc.SecurityContext;
-import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.Ordered;
@@ -58,7 +58,7 @@ import static ch.plaintext.demo.oauthmock.OAuthMockProperties.PATH;
  * happens when root's OIDC client completes the code flow.</p>
  */
 @Configuration
-@EnableConfigurationProperties(OAuthMockProperties.class)
+@ConditionalOnProperty(name = OAuthMockProperties.ENABLED, havingValue = "true", matchIfMissing = true)
 public class OAuthMockConfig {
 
     static final String LOGIN = PATH + "/login";

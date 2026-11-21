@@ -16,6 +16,10 @@ import java.util.List;
 public class OAuthMockProperties {
 
     public static final String PATH = "/oauth-mock";
+    /** Karte 2418: false (profiles login-form, login-oidc) leaves the mock out; the accounts stay. */
+    public static final String ENABLED = "demo.oauth-mock.enabled";
+
+    private boolean enabled = true;
 
     /** Public base URL of the application (issuer = baseUrl + /oauth-mock). */
     private String baseUrl = "http://localhost:8080";
@@ -31,6 +35,14 @@ public class OAuthMockProperties {
 
     public String issuer() {
         return getBaseUrl() + PATH;
+    }
+
+    public boolean isEnabled() {
+        return enabled;
+    }
+
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
     }
 
     public String getBaseUrl() {

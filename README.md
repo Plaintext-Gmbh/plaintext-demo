@@ -18,7 +18,7 @@ This downloads the latest release into `./plaintext-demo`, starts it on http://l
 opens the login in your browser. The H2 database is created next to the jar (`plaintext-demo/data`).
 
 From a clone (builds with Maven first): `./start.sh` — options: `--port 8080`, `--reset` (start with
-an empty database), `--no-browser`.
+an empty database), `--no-browser`, `--login builtin|form|oidc`, `--guard` (see below).
 
 ## Sign in
 
@@ -29,7 +29,7 @@ an empty database), `--no-browser`.
 | `user` | `user` | regular user of tenant `default` |
 | `extra` | `extra` | administrator of tenant `extra` — different data |
 
-Use the form, or **Sign in with the demo IdP**: that is the built-in OAuth2/OIDC server
+By default the login goes straight to the **demo IdP**: the built-in OAuth2/OIDC server
 (module `plaintext-demo-oauth-mock`), standing in for Keycloak. The UI is English; switch to German
 in the user settings.
 
@@ -52,6 +52,37 @@ as an example of an installable module (menu, dashboard tile, settings page, fou
 a mini editor and their own window. The notes are Markdown files in a plaintext-root file store of type «Local file»
 (`LokaleDateiAblage`) below `${DEMO_DATA_DIR}/ablagen`; the nightly reset empties that folder and every account gets
 its sample note back.
+
+## Self-hosted: locks and login
+
+**Locks.** The online demo (demo.plaintext.ch) blocks writes and a few admin pages, the code default
+(`DEMO_GUARD=true`). A demo started with `start.sh` is yours: everything is open (`DEMO_GUARD=false`).
+`--guard` (or `DEMO_GUARD=true`) keeps the online locks. With `java -jar` directly, set
+`DEMO_GUARD=false` yourself.
+
+**Login.** `--login` (or `DEMO_LOGIN`) picks how you sign in; it sets the Spring profile:
+
+| `--login` | Profile | Sign-in |
+|-----------|---------|---------|
+| `builtin` (default) | – | the built-in demo IdP, as online |
+| `form` | `login-form` | built-in IdP off, root's own sign-in form with the demo accounts |
+| `oidc` | `login-oidc` | built-in IdP off, your own OIDC server, e.g. Keycloak |
+
+For `oidc` set, before the start:
+
+| Variable | |
+|----------|--|
+| `DEMO_OIDC_ISSUER` | required, e.g. `https://keycloak.example.org/realms/demo` |
+| `DEMO_OIDC_CLIENT_ID` | required |
+| `DEMO_OIDC_CLIENT_SECRET` | required |
+| `DEMO_OIDC_BUTTON_LABEL` | default `Sign in` |
+| `DEMO_OIDC_USERNAME_ATTRIBUTE` | default `preferred_username`; an account signs in if this claim equals a demo username |
+| `DEMO_OIDC_AUTO_CREATE_USERS` | default `false`; `true` creates unknown users on their first sign-in |
+
+At the OIDC server, register the redirect URI `<DEMO_BASE_URL>/login/oauth2/code/own-idp`
+(locally `http://localhost:8080/login/oauth2/code/own-idp`). The demo stores this server as the
+OIDC configuration «Own IdP» and refreshes it on every start. With the locks off you can also edit it
+on root's OIDC admin page. Switching back to `builtin` or `form` turns «Own IdP» off again.
 
 ## Workbench for root
 

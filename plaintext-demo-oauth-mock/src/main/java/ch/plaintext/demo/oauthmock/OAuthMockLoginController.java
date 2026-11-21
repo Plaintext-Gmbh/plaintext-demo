@@ -1,6 +1,7 @@
 package ch.plaintext.demo.oauthmock;
 
 import jakarta.servlet.http.HttpServletRequest;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.http.MediaType;
 import org.springframework.security.web.csrf.CsrfToken;
 import org.springframework.stereotype.Controller;
@@ -10,6 +11,7 @@ import org.springframework.web.util.HtmlUtils;
 
 /** Sign-in page of the demo identity provider. It lists the demo accounts on purpose. */
 @Controller
+@ConditionalOnProperty(name = OAuthMockProperties.ENABLED, havingValue = "true", matchIfMissing = true)
 public class OAuthMockLoginController {
 
     private final OAuthMockProperties props;

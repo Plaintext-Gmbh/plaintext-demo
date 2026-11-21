@@ -31,6 +31,8 @@ public class DemoDatenLoader {
     static final String MANDAT_DEFAULT = "default";
     static final String MANDAT_EXTRA = "extra";
     static final String OIDC_NAME = "Demo IdP";
+    /** Karte 2418: the own OIDC server of a self-hosted demo (profile login-oidc). */
+    static final String OWN_OIDC_NAME = "Own IdP";
 
     /** username -> roles and mandate. root sees everything, extra is admin of the second mandate. */
     static final Map<String, DemoUser> USERS = Map.of(
@@ -45,15 +47,18 @@ public class DemoDatenLoader {
     private final DemoProductRepository products;
     private final UserPrefsSimpleStorage preferences;
     private final OAuthMockProperties oauthMock;
+    private final DemoOidcProperties ownOidc;
 
     public DemoDatenLoader(MyUserRepository users, PasswordEncoder passwordEncoder, OidcConfigRepository oidcConfigs,
-                           DemoProductRepository products, UserPrefsSimpleStorage preferences, OAuthMockProperties oauthMock) {
+                           DemoProductRepository products, UserPrefsSimpleStorage preferences, OAuthMockProperties oauthMock,
+                           DemoOidcProperties ownOidc) {
         this.users = users;
         this.passwordEncoder = passwordEncoder;
         this.oidcConfigs = oidcConfigs;
         this.products = products;
         this.preferences = preferences;
         this.oauthMock = oauthMock;
+        this.ownOidc = ownOidc;
     }
 
     @Transactional
@@ -67,6 +72,7 @@ public class DemoDatenLoader {
             }
         }
         oidcConfig();
+        ownOidcConfig();
         int newRows = fillProducts(MANDAT_DEFAULT, DemoProducts.forDefault()) + fillProducts(MANDAT_EXTRA, DemoProducts.forExtra());
         log.info("plaintext-demo: {} demo user(s) and {} demo row(s) created, IdP issuer {}", newUsers, newRows, oauthMock.issuer());
     }
@@ -91,11 +97,18 @@ public class DemoDatenLoader {
         }
     }
 
+    private OidcConfig named(String name) {
+        return oidcConfigs.findAll().stream().filter(c -> name.equals(c.getName())).findFirst().orElse(null);
+    }
+
+    /** The built-in IdP; switched off (not deleted) when the mock is off, so the login shows no dead button. */
     private void oidcConfig() {
-        OidcConfig config = oidcConfigs.findAll().stream().filter(c -> OIDC_NAME.equals(c.getName())).findFirst()
-                .orElseGet(OidcConfig::new);
+        OidcConfig config = named(OIDC_NAME);
+        if (config == null) {
+            config = new OidcConfig();
+        }
         config.setName(OIDC_NAME);
-        config.setEnabled(true);
+        config.setEnabled(oauthMock.isEnabled());
         config.setIssuerUrl(oauthMock.issuer());
         config.setClientId(oauthMock.getClientId());
         config.setClientSecret(oauthMock.getClientSecret());
@@ -104,6 +117,32 @@ public class DemoDatenLoader {
         config.setButtonIcon("pi pi-sign-in");
         config.setUsernameAttribute("preferred_username");
         config.setAutoCreateUsers(false);
+        oidcConfigs.save(config);
+    }
+
+    /** Own IdP from demo.oidc.*: refreshed on every start; without an issuer an existing entry is switched off. */
+    private void ownOidcConfig() {
+        OidcConfig config = named(OWN_OIDC_NAME);
+        if (!ownOidc.isConfigured()) {
+            if (config != null && config.isEnabled()) {
+                config.setEnabled(false);
+                oidcConfigs.save(config);
+            }
+            return;
+        }
+        if (config == null) {
+            config = new OidcConfig();
+        }
+        config.setName(OWN_OIDC_NAME);
+        config.setEnabled(true);
+        config.setIssuerUrl(ownOidc.getIssuerUrl().replaceAll("/+$", ""));
+        config.setClientId(ownOidc.getClientId());
+        config.setClientSecret(ownOidc.getClientSecret());
+        config.setScopes("openid,profile,email");
+        config.setButtonLabel(ownOidc.getButtonLabel());
+        config.setButtonIcon("pi pi-sign-in");
+        config.setUsernameAttribute(ownOidc.getUsernameAttribute());
+        config.setAutoCreateUsers(ownOidc.isAutoCreateUsers());
         oidcConfigs.save(config);
     }
 
