@@ -63,8 +63,16 @@ cd ../plaintext-root && mvn install -DskipTests     # e.g. 3.20.0-SNAPSHOT into 
 cd ../plaintext-demo && ./start.sh --root 3.20.0-SNAPSHOT --reset
 ```
 
-Building needs the root artifacts from GitHub Packages, i.e. a `settings.xml` with a token
-(`read:packages`) for the server id `plaintext`.
+Building needs the root artifacts: in the LAN from Reposilite (https://maven.plaintext.ch/releases,
+no login), otherwise from GitHub Packages, i.e. a `settings.xml` with a token (`read:packages`) for
+the server id `plaintext`.
+
+## CI and release
+
+Woodpecker (ci.plaintext.ch) builds every pull request and push to `main` (`.woodpecker/build.yml`).
+A tag `vX.Y.Z` runs `ci/release.sh` (`.woodpecker/release.yml`): build with tests, then
+`plaintext-demo-X.Y.Z.jar` and its `.sha256` go to a new GitHub release; an existing release for the
+tag is never overwritten. Dry run: `CI_COMMIT_TAG=vX.Y.Z ci/release.sh --trocken`.
 
 ## Configuration
 
