@@ -1,0 +1,11 @@
+# geschrieben von der Seite Laufzeit-Module (Karte 1608), kimi1 (Karte 2478, Daniel-Punkt 4/5)
+auswahl:
+  - name: plaintext-modul-files
+    version: latest
+    registry: oeffentlich
+  - name: plaintext-modul-notizen
+    version: latest
+    registry: oeffentlich
+  - name: plaintext-modul-demo
+    version: latest
+    registry: oeffentlich
