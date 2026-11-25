@@ -1,4 +1,9 @@
-# Demo-Instanz demo.plaintext.ch — Sollstand & nächtlicher Reset (Karte 2478)
+# Modul-Demo module-demo.plaintext.ch — Sollstand & nächtlicher Reset (Karte 2478, 2518)
+
+**Welche Instanz?** Diese Dateien gehören zur Hüllen-/Lader-Instanz `plaintext-demo` auf dem NAS
+(Port 1171, **module-demo.plaintext.ch**, Postgres). `demo.plaintext.ch` ist eine andere Instanz:
+`plaintext-demo-public` (Port 1172) mit dem Release-Jar dieses Repos, H2 und eigenem Reset
+(`DEMO_RESET_CRON`, 03:30). Seit Karte 2378 zeigt der Tunnel so (Karte 2518).
 
 Auftrag Daniel (Karte 2478, Punkt 3): Root-Zugang der Demo öffentlich, **mit nächtlichem Reset**
 (Daten und Modulauswahl jede Nacht zurück). Dieses Verzeichnis versioniert den Sollstand und
@@ -14,10 +19,11 @@ das Reset-Skript; die laufende Instanz liegt auf dem NAS unter `/volume1/docker/
 
 ## Cron
 
-Der Cron läuft als root auf dem NAS (User-crontab ist gesperrt), 03:17 Uhr nachts:
+Der Cron läuft als root auf dem NAS (User-crontab ist gesperrt), Eintrag in `/etc/crontab` seit
+Karte 2518, 03:17 NAS-Zeit. Das NAS läuft auf `Africa/Windhoek` (MEZ+1), also 02:17 MEZ:
 
 ```
-17 3 * * * sh /volume1/docker/plaintext-demo/reset/reset-nachts.sh >> /volume1/docker/plaintext-demo/reset/reset.log 2>&1
+17 3 * * * root sh /volume1/docker/plaintext-demo/reset/reset-nachts.sh >> /volume1/docker/plaintext-demo/reset/reset.log 2>&1
 ```
 
 Log der Probeläufe: `/volume1/docker/plaintext-demo/reset/reset.log`.
@@ -37,3 +43,10 @@ Danach die beiden Dateien hierher zurückspielen und committen.
 Vorher: Marker-Tabelle `reset_probe` eingefügt, Auswahl auf `version: 1.0.0` manipuliert.
 Skriptlauf: Marker weg (`relation "reset_probe" does not exist`), Auswahl wieder `latest`,
 Container healthy, status.txt ergebnis=OK.
+
+## Zugänge und Hinweis (Karte 2518)
+
+Die Hashes von `root@root.root` und `demo@demo.demo` waren im ersten Sollstand unbrauchbar (die Shell
+hatte `$…` im BCrypt-Wert ersetzt, Länge 63/54 statt 60), deshalb ging keine Passwort-Anmeldung.
+Seit 2518 sind sie gültig (BCrypt, Kosten 12). Die Werte sind bewusst öffentlich und stehen auf der
+Login-Seite: `plaintext.login.demo-hinweis` in `config/application.yml` der Instanz (root-v2 PR 91).
