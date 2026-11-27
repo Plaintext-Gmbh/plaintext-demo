@@ -30,6 +30,9 @@ logging:
     ch.plaintext.demo: INFO
 
 plaintext:
+  # Karte 2541: /nosec/version meldet die Version der Demo (wie app/guild), nicht die von root.
+  # Maven setzt den Wert beim Bauen ein (Resource-Filter des Spring-Boot-Parents).
+  version: '@project.version@'
   i18n:
     # root >= 3.26.0 (root-v2 #37): English before login and for users without saved preferences.
     default-language: en
