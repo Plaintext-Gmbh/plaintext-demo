@@ -14,7 +14,9 @@ das Reset-Skript; die laufende Instanz liegt auf dem NAS unter `/volume1/docker/
 - `sollstand.sql.gz` — pg_dump der Demo-DB (Postgres `plaintext_demo`, 51 Tabellen). Zustand vom
   23.11.2026 (Hülle 3.77.0, Auswahl files/notizen/demo). **Nach jeder gewollten Daten-Änderung der
   Demo neu erzeugen** (siehe unten).
-- `auswahl.soll.yaml` — Sollstand der Modulauswahl (Laufzeit-Module, Seite «Laufzeit-Module»).
+- `auswahl.soll.yaml` — Sollstand der Modulauswahl (Laufzeit-Module, Seite «Laufzeit-Module»). Seit Karte 2541
+  über den Kunden-Index `registry kunde` (Schlüssel demo, Abos intern + Demo). Ändert sich die Auswahl auf dem NAS,
+  diese Datei mitziehen, sonst setzt der Reset sie nachts zurück.
 - `reset-nachts.sh` — Reset-Skript: Modulauswahl zurück, App stoppen, DB auf den Sollstand, App starten.
 
 ## Cron
