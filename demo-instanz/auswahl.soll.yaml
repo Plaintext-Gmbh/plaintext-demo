@@ -1,11 +1,13 @@
 # geschrieben von der Seite Laufzeit-Module (Karte 1608), kimi1 (Karte 2478, Daniel-Punkt 4/5)
+# Karte 2535/2541: alle drei ueber den Kunden-Index /nosec/k/ (Schluessel demo, Abos intern + Demo);
+# die Ablage 'oeffentlich' gibt es nicht mehr (404). files fest auf 1.3.9 (Karte 2535).
 auswahl:
   - name: plaintext-modul-files
-    version: latest
-    registry: oeffentlich
+    version: 1.3.9
+    registry: kunde
   - name: plaintext-modul-notizen
     version: latest
-    registry: oeffentlich
+    registry: kunde
   - name: plaintext-modul-demo
     version: latest
-    registry: oeffentlich
+    registry: kunde

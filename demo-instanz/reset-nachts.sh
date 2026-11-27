@@ -8,7 +8,7 @@ D=/volume1/docker/plaintext-demo
 echo "== Demo-Reset $(date '+%F %T') =="
 
 cp "$D/module/auswahl.soll.yaml" "$D/module/auswahl.yaml"
-echo "Modulauswahl zurueck (files/notizen/demo, registry oeffentlich)"
+echo "Modulauswahl zurueck (files/notizen/demo, registry kunde)"
 
 sudo -n docker stop plaintext-demo-app >/dev/null
 echo "App gestoppt"
